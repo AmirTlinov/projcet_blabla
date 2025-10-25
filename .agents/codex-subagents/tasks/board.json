@@ -10,15 +10,15 @@
       "id": "UX-001",
       "title": "Расширить UI: секции продукта, анимации, адаптив",
       "role": "ux",
-      "status": "in_progress",
+      "status": "done",
       "description": null,
-      "assignee": "ux-agent"
+      "assignee": "web-agent"
     },
     {
       "id": "DEV-001",
       "title": "Интерактивность: динамические блоки, вкладки, data cards",
       "role": "dev",
-      "status": "in_progress",
+      "status": "done",
       "description": null,
       "assignee": "web-agent"
     },
@@ -26,7 +26,7 @@
       "id": "DEV-002",
       "title": "Live data widgets: roadmap timeline, metrics ticker",
       "role": "dev",
-      "status": "in_progress",
+      "status": "done",
       "description": null,
       "assignee": "web-agent"
     }
