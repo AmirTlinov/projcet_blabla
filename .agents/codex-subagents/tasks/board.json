@@ -5,5 +5,30 @@
     "in_progress",
     "done"
   ],
-  "tasks": []
+  "tasks": [
+    {
+      "id": "UX-001",
+      "title": "Расширить UI: секции продукта, анимации, адаптив",
+      "role": "ux",
+      "status": "in_progress",
+      "description": null,
+      "assignee": "ux-agent"
+    },
+    {
+      "id": "DEV-001",
+      "title": "Интерактивность: динамические блоки, вкладки, data cards",
+      "role": "dev",
+      "status": "in_progress",
+      "description": null,
+      "assignee": "web-agent"
+    },
+    {
+      "id": "DEV-002",
+      "title": "Live data widgets: roadmap timeline, metrics ticker",
+      "role": "dev",
+      "status": "in_progress",
+      "description": null,
+      "assignee": "web-agent"
+    }
+  ]
 }
