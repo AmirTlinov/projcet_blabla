@@ -1,37 +1,33 @@
-# Subagent Playground
+# Subagent Control Room
 
-Этот проект полностью управляется через Codex subagents. Ниже — инструкции для быстрой проверки с нуля.
+Лендинг демонстрирует, как Codex subagents управляют пайплайном: от генерации файлов через CLI до review и оркестрации живых логов. Интерфейс построен в стилистике glassmorphism и не требует сторонних зависимостей.
 
-## Установка
+## Секции лендинга
+- **Hero + навигация** — живая статистика активных оркестраций и быстрые якорные кнопки (`data-scroll`).
+- **Interactive CLI rehearsal** — мини-терминал для ввода и проигрывания команд.
+- **Live orchestrator** — табы Metrics/Logs: первые обновляют карточки, вторые транслируют псевдолог каждые 4 секунды.
+- **Agent squad assign** — кнопки с `data-toast` вызывают уникальные toast-уведомления без дубликатов.
+- **Automation timeline** — карточки раскрываются по мере появления в viewport через IntersectionObserver.
+- **Docs & FAQ** — быстрые ссылки и аккордеон с распространёнными вопросами.
+
+## Локальный запуск
+Оба способа работают из корня репозитория.
+
+### Вариант 1. npm http-server
 ```bash
-subagents init --config-dir .agents/codex-subagents
-subagents register web-agent dev \
-  --repo $(pwd) --branch feature/site \
-  --config-dir .agents/codex-subagents
-subagents worktree create --agent web-agent --config-dir .agents/codex-subagents
+npm install --global http-server
+http-server -p 4173
 ```
+Затем открой `http://localhost:4173` в браузере.
 
-## Генерация файлов
+### Вариант 2. Встроенный Python сервер
 ```bash
-subagents file write index.html --agent web-agent --stdin < index.html.template
-subagents file write styles.css --agent web-agent --stdin < styles.css.template
-subagents file write script.js  --agent web-agent --stdin < script.js.template
+python -m http.server 4173
 ```
+URL тот же: `http://localhost:4173`.
 
-## Удалённые метрики и логи
-```bash
-subagents serve --rate-limit 120 --rate-window 60 --token secret
-subagents metrics --remote-url http://127.0.0.1:8075 --token secret
-subagents logs web-agent --remote-url http://127.0.0.1:8075 --token secret --follow --follow-seconds 15
-```
-
-## Коммиты и публикация
-```bash
-subagents exec web-agent -- git status -sb
-subagents exec web-agent -- git commit -am "feat: update landing"
-subagents exec web-agent -- git push origin feature/site
-```
-
-## Что дальше
-- Добавить CI, используя `subagents exec` для запусков тестов.
-- Настроить review-агента: `subagents review <PR> --agent reviewer`.
+## Полезно знать
+- Навигация использует плавный скролл, а при отсутствии поддержки браузером выполняется мгновенный переход.
+- Hero-счётчик обновляется каждые 5 секунд и ставит анимацию класса `count-flash`.
+- Видимость вкладок управляет интервалами: при скрытой вкладке лог-стрим и счетчики останавливаются (через `visibilitychange`).
+- Перед выгрузкой страницы скрипт очищает интервалы/таймауты, чтобы не оставлять висящие задачи.

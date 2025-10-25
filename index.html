@@ -16,17 +16,29 @@
     <div class="page">
       <header class="hero" id="top">
         <div class="badge">Flagship+++ workflow</div>
-        <h1>
-          Subagent Control Room
-        </h1>
+        <h1>Subagent Control Room</h1>
         <p>
           Единая точка управления Codex subagents: от генерации файлов до удалённого review. Ни одной
           ручной правки &mdash; всё через CLI.
         </p>
+        <div class="hero-status" aria-live="polite">
+          <div>
+            <span>Live orchestrations</span>
+            <strong class="hero-count"><span data-active-count>64</span></strong>
+            <small>auto refresh every 5s</small>
+          </div>
+        </div>
         <div class="hero-actions">
           <button class="cta" id="spawn-agent">Spawn web-agent</button>
           <button class="ghost" id="toggle-theme">Toggle theme</button>
         </div>
+        <nav class="hero-nav" aria-label="Quick navigation">
+          <button class="ghost" type="button" data-scroll="#cli">CLI rehearsal</button>
+          <button class="ghost" type="button" data-scroll="#orchestrator">Live orchestrator</button>
+          <button class="ghost" type="button" data-scroll="#squad">Agent squad</button>
+          <button class="ghost" type="button" data-scroll="#timeline-section">Timeline</button>
+          <button class="ghost" type="button" data-scroll="#faq">FAQ</button>
+        </nav>
         <div class="hero-grid">
           <div>
             <span>Zero Touch</span>
@@ -43,7 +55,7 @@
         </div>
       </header>
 
-      <section class="panel" aria-labelledby="cmd-title">
+      <section class="panel" aria-labelledby="cmd-title" id="cli">
         <div class="panel-header">
           <div>
             <h2 id="cmd-title">Interactive CLI rehearsal</h2>
@@ -63,6 +75,90 @@
             />
             <button id="run-command">Run</button>
           </div>
+        </div>
+      </section>
+
+      <section class="panel orchestrator" aria-labelledby="orchestrator-title" id="orchestrator">
+        <div class="panel-header">
+          <div>
+            <h2 id="orchestrator-title">Live orchestrator</h2>
+            <p>Табы имитируют метрики и поток логов, чтобы быстро отладить сценарии.</p>
+          </div>
+          <button class="ghost" id="refresh-metrics">Refresh</button>
+        </div>
+        <div class="tablist" role="tablist" aria-label="Live orchestrator tabs">
+          <button
+            type="button"
+            class="tab-button is-active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-metrics"
+            data-tab="metrics"
+          >
+            Metrics
+          </button>
+          <button
+            type="button"
+            class="tab-button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-logs"
+            data-tab="logs"
+          >
+            Logs
+          </button>
+        </div>
+        <div class="tab-panels">
+          <div class="tab-panel" id="panel-metrics" role="tabpanel" data-panel="metrics">
+            <div class="metrics" id="metrics-board">
+              <div class="metric-card">
+                <span>Active agents</span>
+                <strong data-metric="active" data-min="48" data-max="127">64</strong>
+              </div>
+              <div class="metric-card">
+                <span>Avg cycle</span>
+                <strong data-metric="cycle" data-min="18" data-max="43" data-suffix="s">26s</strong>
+              </div>
+              <div class="metric-card">
+                <span>Tasks completed</span>
+                <strong data-metric="tasks" data-min="120" data-max="420">210</strong>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-panel"
+            id="panel-logs"
+            role="tabpanel"
+            data-panel="logs"
+            aria-hidden="true"
+            hidden
+          >
+            <ul class="log-stream" data-log-stream aria-live="polite" aria-label="Agent log stream"></ul>
+            <p class="log-hint">Logs stream обновляется каждые 4 секунды.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="squad-title" id="squad">
+        <div class="panel-header">
+          <div>
+            <h2 id="squad-title">Agent squad assign</h2>
+            <p>Назначь роли для ускорения пайплайна; каждая кнопка создаёт toast.</p>
+          </div>
+        </div>
+        <div class="squad-grid">
+          <button class="cta" type="button" data-toast="ranger" data-toast-message="Ranger agent deployed to docs sync lane">
+            Deploy Ranger
+          </button>
+          <button class="ghost" type="button" data-toast="sentinel" data-toast-message="Sentinel agent assigned to error triage">
+            Assign Sentinel
+          </button>
+          <button class="ghost" type="button" data-toast="scribe" data-toast-message="Scribe agent drafting RFC updates">
+            Summon Scribe
+          </button>
+          <button class="ghost" type="button" data-toast="runner" data-toast-message="Runner agent handling CLI errands">
+            Dispatch Runner
+          </button>
         </div>
       </section>
 
@@ -101,31 +197,7 @@
         </article>
       </section>
 
-      <section class="panel" aria-labelledby="metrics-title">
-        <div class="panel-header">
-          <div>
-            <h2 id="metrics-title">Live metrics preview</h2>
-            <p>Данные симулируются на клиенте и обновляются каждые 5 секунд.</p>
-          </div>
-          <button class="ghost" id="refresh-metrics">Refresh</button>
-        </div>
-        <div class="metrics" id="metrics-board">
-          <div class="metric-card">
-            <span>Active agents</span>
-            <strong id="metric-active">3</strong>
-          </div>
-          <div class="metric-card">
-            <span>Restart count</span>
-            <strong id="metric-restarts">0</strong>
-          </div>
-          <div class="metric-card">
-            <span>Rate-limit budget</span>
-            <strong id="metric-budget">120/min</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel" aria-labelledby="timeline-title">
+      <section class="panel" aria-labelledby="timeline-title" id="timeline-section">
         <div class="panel-header">
           <div>
             <h2 id="timeline-title">Automation timeline</h2>
@@ -133,7 +205,28 @@
           </div>
           <button class="ghost" id="clear-timeline">Clear</button>
         </div>
-        <ol class="timeline" id="timeline"></ol>
+        <ol class="timeline" id="timeline">
+          <li class="timeline-item">
+            <div class="timeline-time">08:35</div>
+            <p>Spawned web-agent worktree</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">08:42</div>
+            <p>Synced repo state с origin/feature/site</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">09:10</div>
+            <p>Ran `subagents metrics --remote-url ...`</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">09:28</div>
+            <p>Reviewer agent posted summary to Slack</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">09:56</div>
+            <p>CI artifacts archived и выданы tokens</p>
+          </li>
+        </ol>
       </section>
 
       <section class="grid docs" aria-label="Docs and links">
@@ -156,14 +249,49 @@ subagents logs web-agent \
         </article>
       </section>
 
+      <section class="panel faq" aria-labelledby="faq-title" id="faq">
+        <div class="panel-header">
+          <div>
+            <h2 id="faq-title">FAQ</h2>
+            <p>Ответы на частые вопросы об оркестрации subagents.</p>
+          </div>
+        </div>
+        <div class="accordion">
+          <article class="accordion-item">
+            <button type="button" data-accordion aria-expanded="true" aria-controls="faq-panel-1">
+              Как быстро обновить worktree?
+            </button>
+            <div class="accordion-panel" id="faq-panel-1" role="region">
+              <p>Используй `subagents worktree sync --agent &lt;name&gt;` — обновления займут секунды без ручных merge.</p>
+            </div>
+          </article>
+          <article class="accordion-item">
+            <button type="button" data-accordion aria-expanded="false" aria-controls="faq-panel-2">
+              Что с секретами и токенами?
+            </button>
+            <div class="accordion-panel" id="faq-panel-2" role="region">
+              <p>Secrets прокидываются через `subagents serve --env-from` и доступны только конкретному агенту.</p>
+            </div>
+          </article>
+          <article class="accordion-item">
+            <button type="button" data-accordion aria-expanded="false" aria-controls="faq-panel-3">
+              Как повторить среду локально?
+            </button>
+            <div class="accordion-panel" id="faq-panel-3" role="region">
+              <p>На машине разработчика достаточно `python -m http.server` и включенного subagent CLI.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <footer class="footer">
         <div>
           <strong>Need review?</strong>
           <p>
-            `subagents review <PR> --agent reviewer-agent` автосоздаёт worktree и запускает reviewer prompts.
+            `subagents review &lt;PR&gt; --agent reviewer-agent` автосоздаёт worktree и запускает reviewer prompts.
           </p>
         </div>
-        <a href="#top" class="ghost">Back to top</a>
+        <a href="#top" class="ghost" data-scroll="#top">Back to top</a>
       </footer>
     </div>
 
