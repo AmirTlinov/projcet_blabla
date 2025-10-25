@@ -2,61 +2,171 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Subagent Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Subagent Control Room</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <header class="hero">
-      <h1>Subagent Playground</h1>
-      <p>Сайт полностью собран через Codex subagents — без ручного редактирования.</p>
-      <div class="cta-group">
-        <button id="cta">Show Message</button>
-        <button id="open-docs">Open README</button>
-      </div>
-    </header>
-
-    <main>
-      <section class="features">
-        <article>
-          <h2>Zero Touch</h2>
-          <p>Worktree, sandbox и writer управляются из одной CLI-команды.</p>
-        </article>
-        <article>
-          <h2>Remote Observability</h2>
-          <p>HTTP сервис выдаёт /metrics и streaming logs для каждого агента.</p>
-        </article>
-        <article>
-          <h2>Role Prompts</h2>
-          <p>Каждый subagent получает собственный AGENTS.md и prompts/.</p>
-        </article>
-      </section>
-
-      <section class="panel">
-        <h2>Live Metrics Curl</h2>
-        <pre>
-curl -H "Authorization: Bearer secret" \
-  http://127.0.0.1:8075/metrics
-        </pre>
+    <div class="page">
+      <header class="hero" id="top">
+        <div class="badge">Flagship+++ workflow</div>
+        <h1>
+          Subagent Control Room
+        </h1>
         <p>
-          CLI аналог: <code>subagents metrics --remote-url http://127.0.0.1:8075 --token secret</code>
+          Единая точка управления Codex subagents: от генерации файлов до удалённого review. Ни одной
+          ручной правки &mdash; всё через CLI.
         </p>
+        <div class="hero-actions">
+          <button class="cta" id="spawn-agent">Spawn web-agent</button>
+          <button class="ghost" id="toggle-theme">Toggle theme</button>
+        </div>
+        <div class="hero-grid">
+          <div>
+            <span>Zero Touch</span>
+            `subagents init && subagents file write ...`
+          </div>
+          <div>
+            <span>Remote Observability</span>
+            `subagents metrics --remote-url ...`
+          </div>
+          <div>
+            <span>Streaming Logs</span>
+            `subagents logs --follow --follow-seconds 10`
+          </div>
+        </div>
+      </header>
+
+      <section class="panel" aria-labelledby="cmd-title">
+        <div class="panel-header">
+          <div>
+            <h2 id="cmd-title">Interactive CLI rehearsal</h2>
+            <p>Симуляция удалённых команд. Ввод поддерживает готовые snippets.</p>
+          </div>
+          <button class="ghost" id="insert-snippet">Insert snippet</button>
+        </div>
+        <div class="terminal">
+          <div class="terminal-output" id="terminal-output" aria-live="polite"></div>
+          <div class="terminal-input">
+            <span>$</span>
+            <input
+              type="text"
+              id="command-input"
+              placeholder="subagents file write hero.md --stdin < hero.md"
+              aria-label="Command input"
+            />
+            <button id="run-command">Run</button>
+          </div>
+        </div>
       </section>
 
-      <section class="panel">
-        <h2>Streaming Logs</h2>
-        <p>Используй удалённый follow, чтобы смотреть прогресс субагента без входа на сервер.</p>
-        <pre>
-subagents logs web-agent --remote-url http://127.0.0.1:8075 \
+      <section class="grid" aria-label="Subagent capabilities">
+        <article>
+          <h3>Writers</h3>
+          <p>
+            Генерация HTML/CSS/JS/MD осуществляется через `subagents file write` с потоковым вводом, MIME
+            детектируется автоматически.
+          </p>
+          <ul>
+            <li>stdin/base64/input-path</li>
+            <li>Chunked streaming &mdash; нет OOM</li>
+            <li>Авто MIME и подсчёт байтов</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Reviewers</h3>
+          <p>
+            Ролевая библиотека содержит reviewer prompts, gh CLI запускается через `subagents exec` или
+            `subagents review`.
+          </p>
+          <div class="tag-strip">
+            <span>gh pr merge --auto</span>
+            <span>Streaming logs</span>
+            <span>Rate limit aware</span>
+          </div>
+        </article>
+        <article>
+          <h3>Observability</h3>
+          <p>
+            Встроенный FastAPI сервис предоставляет REST + Prometheus + streaming logs. Лимиты настраиваются
+            при запуске `subagents serve`.
+          </p>
+          <pre>subagents serve --rate-limit 200 --rate-window 30 --token secret</pre>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="metrics-title">
+        <div class="panel-header">
+          <div>
+            <h2 id="metrics-title">Live metrics preview</h2>
+            <p>Данные симулируются на клиенте и обновляются каждые 5 секунд.</p>
+          </div>
+          <button class="ghost" id="refresh-metrics">Refresh</button>
+        </div>
+        <div class="metrics" id="metrics-board">
+          <div class="metric-card">
+            <span>Active agents</span>
+            <strong id="metric-active">3</strong>
+          </div>
+          <div class="metric-card">
+            <span>Restart count</span>
+            <strong id="metric-restarts">0</strong>
+          </div>
+          <div class="metric-card">
+            <span>Rate-limit budget</span>
+            <strong id="metric-budget">120/min</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="timeline-title">
+        <div class="panel-header">
+          <div>
+            <h2 id="timeline-title">Automation timeline</h2>
+            <p>Каждый шаг фиксируется; scroll для просмотра истории.</p>
+          </div>
+          <button class="ghost" id="clear-timeline">Clear</button>
+        </div>
+        <ol class="timeline" id="timeline"></ol>
+      </section>
+
+      <section class="grid docs" aria-label="Docs and links">
+        <article>
+          <h3>Quick doc links</h3>
+          <ul>
+            <li><code>docs/getting_started.md</code> &mdash; zero-touch onboarding</li>
+            <li><code>docs/workflows.md</code> &mdash; role scenarios</li>
+            <li><code>README.md</code> &mdash; CLI инструкции для проекта</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Remote recipes</h3>
+          <pre>
+subagents logs web-agent \
+  --remote-url http://127.0.0.1:8075 \
   --token secret --follow --follow-seconds 15
-        </pre>
+          </pre>
+          <button class="cta" id="copy-recipe">Copy snippet</button>
+        </article>
       </section>
-    </main>
 
-    <footer>
-      <small>&copy; 2025 Codex Playground</small>
-    </footer>
+      <footer class="footer">
+        <div>
+          <strong>Need review?</strong>
+          <p>
+            `subagents review <PR> --agent reviewer-agent` автосоздаёт worktree и запускает reviewer prompts.
+          </p>
+        </div>
+        <a href="#top" class="ghost">Back to top</a>
+      </footer>
+    </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
   </body>
 </html>
