@@ -2,61 +2,299 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Subagent Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Subagent Control Room</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <header class="hero">
-      <h1>Subagent Playground</h1>
-      <p>Сайт полностью собран через Codex subagents — без ручного редактирования.</p>
-      <div class="cta-group">
-        <button id="cta">Show Message</button>
-        <button id="open-docs">Open README</button>
-      </div>
-    </header>
-
-    <main>
-      <section class="features">
-        <article>
-          <h2>Zero Touch</h2>
-          <p>Worktree, sandbox и writer управляются из одной CLI-команды.</p>
-        </article>
-        <article>
-          <h2>Remote Observability</h2>
-          <p>HTTP сервис выдаёт /metrics и streaming logs для каждого агента.</p>
-        </article>
-        <article>
-          <h2>Role Prompts</h2>
-          <p>Каждый subagent получает собственный AGENTS.md и prompts/.</p>
-        </article>
-      </section>
-
-      <section class="panel">
-        <h2>Live Metrics Curl</h2>
-        <pre>
-curl -H "Authorization: Bearer secret" \
-  http://127.0.0.1:8075/metrics
-        </pre>
+    <div class="page">
+      <header class="hero" id="top">
+        <div class="badge">Flagship+++ workflow</div>
+        <h1>Subagent Control Room</h1>
         <p>
-          CLI аналог: <code>subagents metrics --remote-url http://127.0.0.1:8075 --token secret</code>
+          Единая точка управления Codex subagents: от генерации файлов до удалённого review. Ни одной
+          ручной правки &mdash; всё через CLI.
         </p>
+        <div class="hero-status" aria-live="polite">
+          <div>
+            <span>Live orchestrations</span>
+            <strong class="hero-count"><span data-active-count>64</span></strong>
+            <small>auto refresh every 5s</small>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="cta" id="spawn-agent">Spawn web-agent</button>
+          <button class="ghost" id="toggle-theme">Toggle theme</button>
+        </div>
+        <nav class="hero-nav" aria-label="Quick navigation">
+          <button class="ghost" type="button" data-scroll="#cli">CLI rehearsal</button>
+          <button class="ghost" type="button" data-scroll="#orchestrator">Live orchestrator</button>
+          <button class="ghost" type="button" data-scroll="#squad">Agent squad</button>
+          <button class="ghost" type="button" data-scroll="#timeline-section">Timeline</button>
+          <button class="ghost" type="button" data-scroll="#faq">FAQ</button>
+        </nav>
+        <div class="hero-grid">
+          <div>
+            <span>Zero Touch</span>
+            `subagents init && subagents file write ...`
+          </div>
+          <div>
+            <span>Remote Observability</span>
+            `subagents metrics --remote-url ...`
+          </div>
+          <div>
+            <span>Streaming Logs</span>
+            `subagents logs --follow --follow-seconds 10`
+          </div>
+        </div>
+      </header>
+
+      <section class="panel" aria-labelledby="cmd-title" id="cli">
+        <div class="panel-header">
+          <div>
+            <h2 id="cmd-title">Interactive CLI rehearsal</h2>
+            <p>Симуляция удалённых команд. Ввод поддерживает готовые snippets.</p>
+          </div>
+          <button class="ghost" id="insert-snippet">Insert snippet</button>
+        </div>
+        <div class="terminal">
+          <div class="terminal-output" id="terminal-output" aria-live="polite"></div>
+          <div class="terminal-input">
+            <span>$</span>
+            <input
+              type="text"
+              id="command-input"
+              placeholder="subagents file write hero.md --stdin < hero.md"
+              aria-label="Command input"
+            />
+            <button id="run-command">Run</button>
+          </div>
+        </div>
       </section>
 
-      <section class="panel">
-        <h2>Streaming Logs</h2>
-        <p>Используй удалённый follow, чтобы смотреть прогресс субагента без входа на сервер.</p>
-        <pre>
-subagents logs web-agent --remote-url http://127.0.0.1:8075 \
+      <section class="panel orchestrator" aria-labelledby="orchestrator-title" id="orchestrator">
+        <div class="panel-header">
+          <div>
+            <h2 id="orchestrator-title">Live orchestrator</h2>
+            <p>Табы имитируют метрики и поток логов, чтобы быстро отладить сценарии.</p>
+          </div>
+          <button class="ghost" id="refresh-metrics">Refresh</button>
+        </div>
+        <div class="tablist" role="tablist" aria-label="Live orchestrator tabs">
+          <button
+            type="button"
+            class="tab-button is-active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-metrics"
+            data-tab="metrics"
+          >
+            Metrics
+          </button>
+          <button
+            type="button"
+            class="tab-button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-logs"
+            data-tab="logs"
+          >
+            Logs
+          </button>
+        </div>
+        <div class="tab-panels">
+          <div class="tab-panel" id="panel-metrics" role="tabpanel" data-panel="metrics">
+            <div class="metrics" id="metrics-board">
+              <div class="metric-card">
+                <span>Active agents</span>
+                <strong data-metric="active" data-min="48" data-max="127">64</strong>
+              </div>
+              <div class="metric-card">
+                <span>Avg cycle</span>
+                <strong data-metric="cycle" data-min="18" data-max="43" data-suffix="s">26s</strong>
+              </div>
+              <div class="metric-card">
+                <span>Tasks completed</span>
+                <strong data-metric="tasks" data-min="120" data-max="420">210</strong>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-panel"
+            id="panel-logs"
+            role="tabpanel"
+            data-panel="logs"
+            aria-hidden="true"
+            hidden
+          >
+            <ul class="log-stream" data-log-stream aria-live="polite" aria-label="Agent log stream"></ul>
+            <p class="log-hint">Logs stream обновляется каждые 4 секунды.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="squad-title" id="squad">
+        <div class="panel-header">
+          <div>
+            <h2 id="squad-title">Agent squad assign</h2>
+            <p>Назначь роли для ускорения пайплайна; каждая кнопка создаёт toast.</p>
+          </div>
+        </div>
+        <div class="squad-grid">
+          <button class="cta" type="button" data-toast="ranger" data-toast-message="Ranger agent deployed to docs sync lane">
+            Deploy Ranger
+          </button>
+          <button class="ghost" type="button" data-toast="sentinel" data-toast-message="Sentinel agent assigned to error triage">
+            Assign Sentinel
+          </button>
+          <button class="ghost" type="button" data-toast="scribe" data-toast-message="Scribe agent drafting RFC updates">
+            Summon Scribe
+          </button>
+          <button class="ghost" type="button" data-toast="runner" data-toast-message="Runner agent handling CLI errands">
+            Dispatch Runner
+          </button>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Subagent capabilities">
+        <article>
+          <h3>Writers</h3>
+          <p>
+            Генерация HTML/CSS/JS/MD осуществляется через `subagents file write` с потоковым вводом, MIME
+            детектируется автоматически.
+          </p>
+          <ul>
+            <li>stdin/base64/input-path</li>
+            <li>Chunked streaming &mdash; нет OOM</li>
+            <li>Авто MIME и подсчёт байтов</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Reviewers</h3>
+          <p>
+            Ролевая библиотека содержит reviewer prompts, gh CLI запускается через `subagents exec` или
+            `subagents review`.
+          </p>
+          <div class="tag-strip">
+            <span>gh pr merge --auto</span>
+            <span>Streaming logs</span>
+            <span>Rate limit aware</span>
+          </div>
+        </article>
+        <article>
+          <h3>Observability</h3>
+          <p>
+            Встроенный FastAPI сервис предоставляет REST + Prometheus + streaming logs. Лимиты настраиваются
+            при запуске `subagents serve`.
+          </p>
+          <pre>subagents serve --rate-limit 200 --rate-window 30 --token secret</pre>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="timeline-title" id="timeline-section">
+        <div class="panel-header">
+          <div>
+            <h2 id="timeline-title">Automation timeline</h2>
+            <p>Каждый шаг фиксируется; scroll для просмотра истории.</p>
+          </div>
+          <button class="ghost" id="clear-timeline">Clear</button>
+        </div>
+        <ol class="timeline" id="timeline">
+          <li class="timeline-item">
+            <div class="timeline-time">08:35</div>
+            <p>Spawned web-agent worktree</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">08:42</div>
+            <p>Synced repo state с origin/feature/site</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">09:10</div>
+            <p>Ran `subagents metrics --remote-url ...`</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">09:28</div>
+            <p>Reviewer agent posted summary to Slack</p>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-time">09:56</div>
+            <p>CI artifacts archived и выданы tokens</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="grid docs" aria-label="Docs and links">
+        <article>
+          <h3>Quick doc links</h3>
+          <ul>
+            <li><code>docs/getting_started.md</code> &mdash; zero-touch onboarding</li>
+            <li><code>docs/workflows.md</code> &mdash; role scenarios</li>
+            <li><code>README.md</code> &mdash; CLI инструкции для проекта</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Remote recipes</h3>
+          <pre>
+subagents logs web-agent \
+  --remote-url http://127.0.0.1:8075 \
   --token secret --follow --follow-seconds 15
-        </pre>
+          </pre>
+          <button class="cta" id="copy-recipe">Copy snippet</button>
+        </article>
       </section>
-    </main>
 
-    <footer>
-      <small>&copy; 2025 Codex Playground</small>
-    </footer>
+      <section class="panel faq" aria-labelledby="faq-title" id="faq">
+        <div class="panel-header">
+          <div>
+            <h2 id="faq-title">FAQ</h2>
+            <p>Ответы на частые вопросы об оркестрации subagents.</p>
+          </div>
+        </div>
+        <div class="accordion">
+          <article class="accordion-item">
+            <button type="button" data-accordion aria-expanded="true" aria-controls="faq-panel-1">
+              Как быстро обновить worktree?
+            </button>
+            <div class="accordion-panel" id="faq-panel-1" role="region">
+              <p>Используй `subagents worktree sync --agent &lt;name&gt;` — обновления займут секунды без ручных merge.</p>
+            </div>
+          </article>
+          <article class="accordion-item">
+            <button type="button" data-accordion aria-expanded="false" aria-controls="faq-panel-2">
+              Что с секретами и токенами?
+            </button>
+            <div class="accordion-panel" id="faq-panel-2" role="region">
+              <p>Secrets прокидываются через `subagents serve --env-from` и доступны только конкретному агенту.</p>
+            </div>
+          </article>
+          <article class="accordion-item">
+            <button type="button" data-accordion aria-expanded="false" aria-controls="faq-panel-3">
+              Как повторить среду локально?
+            </button>
+            <div class="accordion-panel" id="faq-panel-3" role="region">
+              <p>На машине разработчика достаточно `python -m http.server` и включенного subagent CLI.</p>
+            </div>
+          </article>
+        </div>
+      </section>
 
-    <script src="script.js"></script>
+      <footer class="footer">
+        <div>
+          <strong>Need review?</strong>
+          <p>
+            `subagents review &lt;PR&gt; --agent reviewer-agent` автосоздаёт worktree и запускает reviewer prompts.
+          </p>
+        </div>
+        <a href="#top" class="ghost" data-scroll="#top">Back to top</a>
+      </footer>
+    </div>
+
+    <script src="script.js" type="module"></script>
   </body>
 </html>
