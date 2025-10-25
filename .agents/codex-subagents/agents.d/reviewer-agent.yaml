@@ -1,0 +1,12 @@
+name: reviewer-agent
+role: review
+repo_path: "/home/amir/\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B/PROJECTS/mcp/CODEX/projcet_blabla"
+branch: review/placeholder
+cli_args:
+- mcp-server
+- --approval-mode
+- full-auto
+sandbox:
+  cli_version: 0.49.0
+worktree:
+  base: main
