@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subagent Playground</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Subagent Playground</h1>
+      <p>Сайт полностью собран через Codex subagents — без ручного редактирования.</p>
+      <div class="cta-group">
+        <button id="cta">Show Message</button>
+        <button id="open-docs">Open README</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="features">
+        <article>
+          <h2>Zero Touch</h2>
+          <p>Worktree, sandbox и writer управляются из одной CLI-команды.</p>
+        </article>
+        <article>
+          <h2>Remote Observability</h2>
+          <p>HTTP сервис выдаёт /metrics и streaming logs для каждого агента.</p>
+        </article>
+        <article>
+          <h2>Role Prompts</h2>
+          <p>Каждый subagent получает собственный AGENTS.md и prompts/.</p>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Live Metrics Curl</h2>
+        <pre>
+curl -H "Authorization: Bearer secret" \
+  http://127.0.0.1:8075/metrics
+        </pre>
+        <p>
+          CLI аналог: <code>subagents metrics --remote-url http://127.0.0.1:8075 --token secret</code>
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>Streaming Logs</h2>
+        <p>Используй удалённый follow, чтобы смотреть прогресс субагента без входа на сервер.</p>
+        <pre>
+subagents logs web-agent --remote-url http://127.0.0.1:8075 \
+  --token secret --follow --follow-seconds 15
+        </pre>
+      </section>
+    </main>
+
+    <footer>
+      <small>&copy; 2025 Codex Playground</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
