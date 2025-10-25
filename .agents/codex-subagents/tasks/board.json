@@ -1,0 +1,9 @@
+{
+  "columns": [
+    "backlog",
+    "todo",
+    "in_progress",
+    "done"
+  ],
+  "tasks": []
+}
