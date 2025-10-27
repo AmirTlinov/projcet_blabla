@@ -1,85 +1,93 @@
-const $ = (q, root=document) => root.querySelector(q);
-const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
+const button = document.getElementById('cta-button');
+const hero = document.querySelector('.hero');
+const messages = [
+  'Subagents deployed another payload! 🚀',
+  'All edits delivered via sandboxed workflows. ✨',
+  'Another iteration shipped without touching main. 🔁',
+  'Automation makes the dream work. 🤖',
+];
 
-const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-const themeKey = 'subagents.theme';
-const getTheme = () => localStorage.getItem(themeKey) || 'auto';
-const applyTheme = (t) => { document.body.dataset.theme = t; };
+let idx = 0;
 
-const installThemeToggle = () => {
-  const btn = document.getElementById('toggle-theme');
-  if (!btn) return;
-  const cycle = { auto: 'dark', dark: 'light', light: 'auto' };
-  const label = { auto: 'Тема: авто', dark: 'Тема: тёмная', light: 'Тема: светлая' };
-  let t = getTheme();
-  applyTheme(t);
-  btn.textContent = 'Тема';
-  btn.setAttribute('aria-pressed', String(t === 'dark' || (t==='auto' && prefersDark)));
-  btn.addEventListener('click', () => {
-    t = cycle[t] || 'auto';
-    localStorage.setItem(themeKey, t);
-    applyTheme(t);
-    btn.setAttribute('aria-pressed', String(t === 'dark' || (t==='auto' && prefersDark)));
-  });
-};
+function createToast(text) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = text;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('visible'));
+  setTimeout(() => {
+    toast.classList.remove('visible');
+    setTimeout(() => toast.remove(), 300);
+  }, 2600);
+}
 
-const log = (s) => {
-  const ol = document.querySelector('[data-log-stream]');
-  if (!ol) return;
-  const li = document.createElement('li');
-  li.textContent = s + ' · ' + new Date().toLocaleTimeString();
-  ol.appendChild(li);
-  while (ol.children.length > 8) ol.removeChild(ol.firstElementChild);
-};
+button.addEventListener('click', () => {
+  hero.classList.add('pulse');
+  setTimeout(() => hero.classList.remove('pulse'), 320);
 
-const updateMetrics = () => {
-  $$('[data-metric]').forEach(el => {
-    const min = Number(el.dataset.min || 0);
-    const max = Number(el.dataset.max || 100);
-    const suffix = el.nextElementSibling?.textContent?.trim() || '';
-    const val = (Math.random()*(max-min)+min);
-    el.textContent = (suffix === '$' ? val.toFixed(2) : Math.round(val));
-  });
-};
+  createToast(messages[idx]);
+  idx = (idx + 1) % messages.length;
+});
 
-const runCommand = () => {
-  const input = document.getElementById('command-input');
-  const out = document.getElementById('terminal-output');
-  if (!input || !out) return;
-  const cmd = input.value.trim();
-  if (!cmd) return;
-  const line = document.createElement('div');
-  line.textContent = `$ ${cmd}`;
-  out.appendChild(line);
-  input.value = '';
-  out.scrollTop = out.scrollHeight;
-  // Demo responses (deterministic snippets)
-  if (cmd.includes('patch --summary-only')) {
-    out.appendChild(Object.assign(document.createElement('pre'),{textContent:`{\n  "type":"unified",\n  "updated":["src/app.ts"],\n  "stat":{"added":12,"removed":4}\n}`}));
-  } else if (cmd.includes('gh pr-merge')) {
-    out.appendChild(Object.assign(document.createElement('pre'),{textContent:`{\n  "merged":true,\n  "auto":true,\n  "method":"squash"\n}`}));
-  } else {
-    out.appendChild(Object.assign(document.createElement('pre'),{textContent:'ok'}));
+const style = document.createElement('style');
+const styleRules = [
+  '.toast {',
+  '  position: fixed;',
+  '  top: 2rem;',
+  '  right: 2rem;',
+  '  padding: 0.9rem 1.35rem;',
+  '  background: rgba(56, 189, 248, 0.95);',
+  '  color: #0f172a;',
+  '  border-radius: 999px;',
+  '  box-shadow: 0 16px 32px rgba(56, 189, 248, 0.35);',
+  '  opacity: 0;',
+  '  transform: translateY(-20px);',
+  '  transition: opacity 0.2s ease, transform 0.2s ease;',
+  '  font-weight: 600;',
+  '}',
+  '',
+  '.toast.visible {',
+  '  opacity: 1;',
+  '  transform: translateY(0);',
+  '}',
+  '',
+  '.hero.pulse {',
+  '  animation: heroPulse 0.32s ease;',
+  '}',
+  '',
+  '@keyframes heroPulse {',
+  '  0% { transform: scale(1); }',
+  '  40% { transform: scale(1.01); }',
+  '  70% { transform: scale(0.995); }',
+  '  100% { transform: scale(1); }',
+  '}',
+].join('
+');
+
+style.textContent = styleRules;
+document.head.appendChild(style);
+// === Enhancements (appended by apply_agents) ===
+(function(){
+  const toTop = document.getElementById('to-top');
+  if(toTop){\n    const toggle =()=>{ toTop.hidden = (window.scrollY < 400); };
+    window.addEventListener('scroll', toggle,{passive:true});
+    toTop.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+    toggle();
   }
-};
-
-const smoothScroll = () => {
-  $$('[data-scroll]').forEach(btn => btn.addEventListener('click', e => {
-    e.preventDefault();
-    const sel = btn.getAttribute('data-scroll');
-    const el = sel ? $(sel) : null;
-    if (!el) return;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' });
-  }));
-};
-
-const boot = () => {
-  installThemeToggle();
-  smoothScroll();
-  updateMetrics();
-  setInterval(() => { updateMetrics(); log('tick'); }, 5000);
-  const run = document.getElementById('run-command');
-  if (run) run.addEventListener('click', runCommand);
-};
-
-document.addEventListener('DOMContentLoaded', boot);
+  const form = document.getElementById('sub-form');
+  if(form){
+    const email = document.getElementById('sub-email');
+    const msg = document.getElementById('sub-msg');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const value = (email.value||'').trim();
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      msg.classList.remove('visually-hidden');
+      if(ok){ msg.textContent = 'Спасибо! Мы отправили письмо для подтверждения.'; msg.style.color='var(--accent,#0ea5e9)'; form.reset(); }
+      else { msg.textContent = 'Введите корректный email.'; msg.style.color='tomato'; email.focus(); }
+    });
+  }
+  // Keyboard shortcuts hint (press ?)
+  let hintShown=false;document.addEventListener('keydown',(e)=>{if(e.key==='?'&&!hintShown){alert('Сокращения: T — смена темы, ↑ — вверх');hintShown=true;}});
+})();
+// === End enhancements ===

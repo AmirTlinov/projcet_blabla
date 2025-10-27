@@ -1,76 +1,69 @@
-<!doctype html>
-<html lang="ru">
+<!DOCTYPE html>
+<html lang='en'>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="description" content="Subagents · Flagship UI — быстрый контроль разработки без интерактива" />
-    <meta name="theme-color" content="#0ea5e9" />
-    <title>Subagents · Flagship UI</title>
-    <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css" />
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Subagent Crafted Site</title>
+    <link rel='stylesheet' href='styles.css'>
   </head>
-  <body data-theme="auto">
-    <a class="skip-link" href="#main">Перейти к контенту</a>
-    <header class="topbar" role="navigation" aria-label="Основная навигация">
-      <div class="brand">
-        <span class="logo-atom" aria-hidden="true"></span>
-        <strong class="brand-name">Subagents</strong>
-      </div>
-      <nav class="topbar-actions">
-        <button id="toggle-theme" class="btn ghost" aria-pressed="false">Тема</button>
-        <button id="open-help" class="btn ghost">Справка</button>
-      </nav>
+  <body>
+    <header class='hero'>
+      <h1>Welcome to the Subagent Playground</h1>
+      <p>All assets generated through Codex subagent orchestration.</p>
+      <button id='cta-button'>Click me</button>
     </header>
-
-    <main id="main" class="page">
-      <section class="hero" aria-labelledby="hero-title">
-        <h1 id="hero-title" class="gradient-text">Flagship+++ Workflow</h1>
-        <p>Команда → результат. Патчи, превью, деплой, Issues/PR — без интерактива.</p>
-        <div class="hero-actions">
-          <button class="btn cta" data-scroll="#cli">CLI репетиция</button>
-          <button class="btn" data-scroll="#orchestrator">Оркестратор</button>
-          <button class="btn" data-scroll="#faq">FAQ</button>
-        </div>
-      </section>
-
-      <section id="cli" class="panel" aria-labelledby="cli-title">
-        <h2 id="cli-title">CLI репетиция</h2>
-        <div class="terminal" role="region" aria-live="polite">
-          <div id="terminal-output" class="terminal-output"></div>
-          <div class="terminal-input">
-            <span>$</span>
-            <input id="command-input" type="text" placeholder="subagents patch --summary-only" />
-            <button id="run-command" class="btn">Выполнить</button>
-          </div>
-        </div>
-      </section>
-
-      <section id="orchestrator" class="panel" aria-labelledby="orc-title">
-        <h2 id="orc-title">Оркестратор</h2>
-        <ul class="metrics">
-          <li><span>p95</span><strong data-metric data-min="4" data-max="12">—</strong><small>мс</small></li>
-          <li><span>reuse</span><strong data-metric data-min="70" data-max="100">—</strong><small>%</small></li>
-          <li><span>cost</span><strong data-metric data-min="0.02" data-max="0.12">—</strong><small>$</small></li>
-        </ul>
-        <button id="refresh-metrics" class="btn ghost">Обновить</button>
-        <ol class="log" data-log-stream aria-live="polite"></ol>
-      </section>
-
-      <section id="faq" class="panel" aria-labelledby="faq-title">
-        <h2 id="faq-title">FAQ</h2>
-        <details>
-          <summary>Как безопасно применить патч?</summary>
-          <pre>git diff -U0 | subagents patch --dry-run --json</pre>
-        </details>
-        <details>
-          <summary>Как слить PR без интерактива?</summary>
-          <pre>subagents gh pr-merge &lt;PR&gt; --json --timeout 240</pre>
-        </details>
+    <main>
+      <section class='features'>
+        <article>
+          <h2>Lightning Setup</h2>
+          <p>Autonomous tooling configured sandboxes and worktrees.</p>
+        </article>
+        <article>
+          <h2>Modern Stack</h2>
+          <p>Clean HTML structure, responsive layout, and interactive script.</p>
+        </article>
+        <article>
+          <h2>Repeatable Flow</h2>
+          <p>Re-run the subagent to iterate without touching local files directly.</p>
+        </article>
       </section>
     </main>
-
-    <footer class="footer">© Subagents · 2025</footer>
-    <script src="./script.js" type="module"></script>
+    <footer>
+      <p>&copy; 2025 Subagent Demo. Crafted fully through automated workflows.</p>
+    </footer>
+    <script src='script.js'></script>
   </body>
 </html>
+<!-- ===== Enhanced Sections (appended by apply_agents) ===== -->
+<section id="features" aria-labelledby="features-title" class="section">
+  <h2 id="features-title">Возможности</h2>
+  <ul class="features">
+    <li>Быстрый старт за секунды</li>
+    <li>Темы: авто/светлая/тёмная</li>
+    <li>Лёгкая навигация и хоткеи</li>
+    <li>Оффлайн (PWA) и кеширование</li>
+  </ul>
+</section>
+
+<section id="gallery" aria-labelledby="gallery-title" class="section">
+  <h2 id="gallery-title">Галерея</h2>
+  <div class="gallery" role="list">
+    <figure role="listitem"><img src="https://picsum.photos/seed/codex1/480/300" alt="Демонстрация 1"><figcaption>Demo 1</figcaption></figure>
+    <figure role="listitem"><img src="https://picsum.photos/seed/codex2/480/300" alt="Демонстрация 2"><figcaption>Demo 2</figcaption></figure>
+    <figure role="listitem"><img src="https://picsum.photos/seed/codex3/480/300" alt="Демонстрация 3"><figcaption>Demo 3</figcaption></figure>
+  </div>
+</section>
+
+<section id="subscribe" aria-labelledby="subscribe-title" class="section">
+  <h2 id="subscribe-title">Подписка на обновления</h2>
+  <form id="sub-form" novalidate>
+    <label for="sub-email">Email</label>
+    <input id="sub-email" name="email" type="email" inputmode="email" autocomplete="email" required placeholder="you@example.com" aria-describedby="sub-help">
+    <small id="sub-help">Мы никогда не рассылаем спам.</small>
+    <button type="submit" class="cta">Подписаться</button>
+    <p id="sub-msg" role="status" aria-live="polite" class="visually-hidden"></p>
+  </form>
+</section>
+
+<button id="to-top" class="to-top" aria-label="Прокрутить вверх" hidden>▲</button>
+<!-- ===== End Enhanced Sections ===== -->
