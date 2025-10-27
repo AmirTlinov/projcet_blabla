@@ -360,3 +360,141 @@ setupToasts();
 setupTimelineReveal();
 setupAccordion();
 setupVisibilityGuards();
+// Theme toggle with persistence and auto mode
+(() => {
+  const btn = document.getElementById('toggle-theme');
+  if (!btn) return;
+
+  const applyTheme = (mode) => {
+    const root = document.body;
+    if (mode === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      btn.setAttribute('aria-pressed', String(prefersDark));
+    } else {
+      root.setAttribute('data-theme', mode);
+      btn.setAttribute('aria-pressed', String(mode === 'dark'));
+    }
+  };
+
+  let mode = localStorage.getItem('theme-mode') || 'auto';
+  applyTheme(mode);
+
+  const mql = window.matchMedia('(prefers-color-scheme: dark)');
+  const onSystemChange = () => { if (mode === 'auto') applyTheme('auto'); };
+  mql.addEventListener?.('change', onSystemChange);
+
+  btn.addEventListener('click', () => {
+    // toggle between light <-> dark; long-press (2s) to reset to auto
+    let pressed = false;
+    let hold;
+    const enableHold = () => {
+      hold = setTimeout(() => {
+        mode = 'auto';
+        localStorage.removeItem('theme-mode');
+        applyTheme('auto');
+      }, 2000);
+    };
+    const cancelHold = () => hold && clearTimeout(hold);
+
+    const onUp = () => {
+      if (!pressed) return;
+      cancelHold();
+      btn.removeEventListener('mouseup', onUp);
+      btn.removeEventListener('mouseleave', onUp);
+      if (mode === 'auto') return; // already handled by long press
+      mode = mode === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme-mode', mode);
+      applyTheme(mode);
+    };
+
+    pressed = true; enableHold();
+    btn.addEventListener('mouseup', onUp, { once: true });
+    btn.addEventListener('mouseleave', onUp, { once: true });
+  });
+})();
+
+// CLI rehearsal helpers
+(() => {
+  const input = document.getElementById('command-input');
+  const output = document.getElementById('terminal-output');
+  const run = document.getElementById('run-command');
+  const insert = document.getElementById('insert-snippet');
+
+  if (!input || !output || !run) return;
+
+  const sample = "subagents logs web-agent --remote-url http://127.0.0.1:8075 --token secret --follow --follow-seconds 8";
+
+  const append = (text) => {
+    const line = document.createElement('span');
+    line.textContent = text;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+  };
+
+  insert?.addEventListener('click', () => {
+    input.value = sample;
+    input.focus();
+  });
+
+  run.addEventListener('click', () => simulate());
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') simulate();
+  });
+
+  function simulate() {
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    append(`$ ${cmd}`);
+    const steps = [
+      'Resolving context defaults...',
+      'Connecting to subagents serve ...',
+      'Streaming logs (SSE)...',
+      'Received 5 events; smoke test passed',
+      'Done.'
+    ];
+    let delay = 0;
+    steps.forEach((s, i) => {
+      setTimeout(() => append(s), delay += (i === 0 ? 250 : 450));
+    });
+  }
+})();
+
+// Keyboard shortcuts: '/' focus input, '1'/'2' tabs, copy recipe
+(() => {
+  const input = document.getElementById('command-input');
+  const copyBtn = document.getElementById('copy-recipe');
+  const pre = copyBtn?.previousElementSibling;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      e.preventDefault();
+      input?.focus();
+    }
+    if ((e.key === '1' || e.key === '2') && !e.metaKey && !e.ctrlKey) {
+      const tab = e.key === '1' ? 'metrics' : 'logs';
+      const btn = document.querySelector(`[data-tab="${tab}"]`);
+      btn?.dispatchEvent(new Event('click'));
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    const text = pre?.textContent?.trim();
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const el = document.querySelector('[data-toast="runner"]');
+      el?.click();
+    } catch {}
+  });
+})();
+
+// Clear timeline
+(() => {
+  const btn = document.getElementById('clear-timeline');
+  const list = document.getElementById('timeline');
+  btn?.addEventListener('click', () => {
+    if (!list) return;
+    while (list.firstChild) list.removeChild(list.firstChild);
+  });
+})();

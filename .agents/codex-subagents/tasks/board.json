@@ -29,6 +29,51 @@
       "status": "done",
       "description": null,
       "assignee": "web-agent"
+    },
+    {
+      "id": "DEV-003",
+      "title": "Wire Live SSE logs from subagents serve",
+      "role": "dev",
+      "status": "done",
+      "description": null,
+      "assignee": "web-agent",
+      "priority": null,
+      "labels": [],
+      "context": [],
+      "constraints": [],
+      "acceptance": [],
+      "dependencies": [],
+      "metadata": {}
+    },
+    {
+      "id": "DOC-001",
+      "title": "Document Command Sentinel usage on site",
+      "role": "dev",
+      "status": "done",
+      "description": null,
+      "assignee": "web-agent",
+      "priority": null,
+      "labels": [],
+      "context": [],
+      "constraints": [],
+      "acceptance": [],
+      "dependencies": [],
+      "metadata": {}
+    },
+    {
+      "id": "QA-001",
+      "title": "SSE live connect QA",
+      "role": "dev",
+      "status": "done",
+      "description": null,
+      "assignee": "web-agent",
+      "priority": null,
+      "labels": [],
+      "context": [],
+      "constraints": [],
+      "acceptance": [],
+      "dependencies": [],
+      "metadata": {}
     }
   ]
 }
