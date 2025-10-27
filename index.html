@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />\n    <meta name="color-scheme" content="dark light" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
     <title>Codex Subagent Control Room</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,13 +14,32 @@
     />
   </head>
   <body data-theme="auto">
+    <!-- Decorative orbs (clearly visible design change) -->
+    <div class="bg-ornaments" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Top navigation bar -->
+    <nav class="topbar" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <span class="logo-atom" aria-hidden="true"></span>
+        <a href="#top" class="brand-name gradient-text">Subagents</a>
+      </div>
+      <div class="topbar-actions">
+        <a class="ghost" href="https://github.com/AmirTlinov/projcet_blabla" rel="noopener">GitHub</a>
+        <button class="cta" id="toggle-theme" aria-pressed="false" aria-label="Toggle color theme">Toggle theme</button>
+      </div>
+    </nav>
+
     <div class="page">
       <header class="hero" id="top">
         <div class="badge">Flagship+++ workflow</div>
-        <h1>Subagent Control Room</h1>
+        <h1 class="gradient-text">Subagent Control Room</h1>
         <p>
           Единая точка управления Codex subagents: от генерации файлов до удалённого review. Ни одной
-          ручной правки &mdash; всё через CLI.
+          ручной правки — всё через CLI.
         </p>
         <div class="hero-status" aria-live="polite">
           <div>
@@ -30,7 +50,7 @@
         </div>
         <div class="hero-actions">
           <button class="cta" id="spawn-agent">Spawn web-agent</button>
-          <button class="ghost" id="toggle-theme" aria-pressed="false" aria-label="Toggle color theme">Toggle theme</button>
+          <button class="ghost" type="button" data-scroll="#cli">Try CLI rehearsal</button>
         </div>
         <nav class="hero-nav" aria-label="Quick navigation">
           <button class="ghost" type="button" data-scroll="#cli">CLI rehearsal</button>
@@ -42,19 +62,19 @@
         <div class="hero-grid">
           <div>
             <span>Zero Touch</span>
-            `subagents init && subagents file write ...`
+            <code>subagents init && subagents file write ...</code>
           </div>
           <div>
             <span>Remote Observability</span>
-            `subagents metrics --remote-url ...`
+            <code>subagents metrics --remote-url ...</code>
           </div>
           <div>
             <span>Streaming Logs</span>
-            `subagents logs --follow --follow-seconds 10`
+            <code>subagents logs --follow --follow-seconds 10</code>
           </div>
           <div>
             <span>Context Memory</span>
-            `subagents context set default_agent dev`
+            <code>subagents context set default_agent dev</code>
           </div>
         </div>
       </header>
@@ -170,20 +190,21 @@
         <article>
           <h3>Writers</h3>
           <p>
-            Генерация HTML/CSS/JS/MD осуществляется через `subagents file write` с потоковым вводом, MIME
+            Генерация HTML/CSS/JS/MD осуществляется через <code>subagents file write</code> с потоковым вводом, MIME
             детектируется автоматически.
           </p>
           <ul>
             <li>stdin/base64/input-path</li>
-            <li>Chunked streaming &mdash; нет OOM</li>
+            <li>Chunked streaming — нет OOM</li>
             <li>Авто MIME и подсчёт байтов</li>
           </ul>
+          <pre>subagents serve --rate-limit 200 --rate-window 30 --token secret</pre>
         </article>
         <article>
           <h3>Reviewers</h3>
           <p>
-            Ролевая библиотека содержит reviewer prompts, gh CLI запускается через `subagents exec` или
-            `subagents review`.
+            Ролевая библиотека содержит reviewer prompts, gh CLI запускается через <code>subagents exec</code> или
+            <code>subagents review</code>.
           </p>
           <div class="tag-strip">
             <span>gh pr merge --auto</span>
@@ -195,9 +216,8 @@
           <h3>Observability</h3>
           <p>
             Встроенный FastAPI сервис предоставляет REST + Prometheus + streaming logs. Лимиты настраиваются
-            при запуске `subagents serve`.
+            при запуске <code>subagents serve</code>.
           </p>
-          <pre>subagents serve --rate-limit 200 --rate-window 30 --token secret</pre>
         </article>
       </section>
 
@@ -220,7 +240,7 @@
           </li>
           <li class="timeline-item">
             <div class="timeline-time">09:10</div>
-            <p>Ran `subagents metrics --remote-url ...`</p>
+            <p>Ran <code>subagents metrics --remote-url ...</code></p>
           </li>
           <li class="timeline-item">
             <div class="timeline-time">09:28</div>
@@ -237,9 +257,9 @@
         <article>
           <h3>Quick doc links</h3>
           <ul>
-            <li><code>docs/getting_started.md</code> &mdash; zero-touch onboarding</li>
-            <li><code>docs/workflows.md</code> &mdash; role scenarios</li>
-            <li><code>README.md</code> &mdash; CLI инструкции для проекта</li>
+            <li><code>docs/getting_started.md</code> — zero-touch onboarding</li>
+            <li><code>docs/workflows.md</code> — role scenarios</li>
+            <li><code>README.md</code> — CLI инструкции для проекта</li>
           </ul>
         </article>
         <article>
@@ -266,7 +286,7 @@ subagents logs web-agent \
               Как быстро обновить worktree?
             </button>
             <div class="accordion-panel" id="faq-panel-1" role="region">
-              <p>Используй `subagents worktree sync --agent &lt;name&gt;` — обновления займут секунды без ручных merge.</p>
+              <p>Используй <code>subagents worktree sync --agent &lt;name&gt;</code> — обновления займут секунды без ручных merge.</p>
             </div>
           </article>
           <article class="accordion-item">
@@ -274,7 +294,7 @@ subagents logs web-agent \
               Что с секретами и токенами?
             </button>
             <div class="accordion-panel" id="faq-panel-2" role="region">
-              <p>Secrets прокидываются через `subagents serve --env-from` и доступны только конкретному агенту.</p>
+              <p>Secrets прокидываются через <code>subagents serve --env-from</code> и доступны только конкретному агенту.</p>
             </div>
           </article>
           <article class="accordion-item">
@@ -282,7 +302,7 @@ subagents logs web-agent \
               Как повторить среду локально?
             </button>
             <div class="accordion-panel" id="faq-panel-3" role="region">
-              <p>На машине разработчика достаточно `python -m http.server` и включенного subagent CLI.</p>
+              <p>Достаточно <code>python -m http.server</code> и включенного subagent CLI.</p>
             </div>
           </article>
         </div>
@@ -292,7 +312,7 @@ subagents logs web-agent \
         <div>
           <strong>Need review?</strong>
           <p>
-            `subagents review &lt;PR&gt; --agent reviewer-agent` автосоздаёт worktree и запускает reviewer prompts.
+            <code>subagents review &lt;PR&gt; --agent reviewer-agent</code> автосоздаёт worktree и запускает reviewer prompts.
           </p>
         </div>
         <a href="#top" class="ghost" data-scroll="#top">Back to top</a>

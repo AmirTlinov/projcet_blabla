@@ -596,3 +596,56 @@ body[data-theme='light'] {
   --shadow: 0 18px 45px rgba(2, 6, 23, 0.12);
 }
 
+/* --- Design refresh: topbar, ornaments, gradient text, orbs (VISIBLE CHANGE) --- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(14px) saturate(120%);
+  background: linear-gradient(180deg, rgba(4,8,18,0.85), rgba(4,8,18,0.45));
+  border-bottom: 1px solid rgba(125, 211, 252, 0.18);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand { display: flex; align-items: center; gap: 0.75rem; }
+.brand-name { font-weight: 600; font-size: 1.15rem; text-decoration: none; color: var(--text); }
+.logo-atom {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #7dd3fc 0%, #38bdf8 35%, rgba(56,189,248,0) 60%),
+              conic-gradient(from 0deg, rgba(56,189,248,0.35), rgba(56,189,248,0));
+  box-shadow: 0 0 24px rgba(56,189,248,0.55);
+}
+.topbar .ghost { padding: 0.5rem 1rem; }
+
+.gradient-text { background: linear-gradient(90deg, #7dd3fc, #38bdf8, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Large, colorful orbs */
+.bg-ornaments { position: fixed; inset: -15% -10% auto -10%; pointer-events: none; z-index: -1; }
+.orb { position: absolute; filter: blur(60px); opacity: 0.45; }
+.orb-1 { width: 42vw; height: 42vw; left: -8vw; top: -10vh; background: radial-gradient(circle, #38bdf8, transparent 60%); }
+.orb-2 { width: 36vw; height: 36vw; right: -8vw; top: 10vh; background: radial-gradient(circle, #a78bfa, transparent 60%); }
+.orb-3 { width: 28vw; height: 28vw; left: 20vw; top: 45vh; background: radial-gradient(circle, #22d3ee, transparent 60%); }
+
+/* Hero stronger contrast */
+.hero { position: relative; overflow: hidden; }
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 70% 20%, rgba(56,189,248,0.12), transparent 40%),
+              radial-gradient(circle at 0% 100%, rgba(167,139,250,0.10), transparent 45%);
+  pointer-events: none;
+}
+
+/* Button emphasis */
+.cta { font-size: 1rem; }
+.ghost { font-size: 0.95rem; }
+
+/* Light theme polish */
+body[data-theme='light'] .topbar { background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6)); border-bottom-color: rgba(15,23,42,0.12); }
+body[data-theme='light'] .logo-atom { box-shadow: 0 0 18px rgba(2,6,23,0.18); }
+
+/* Code block styling inside hero-grid */
+.hero-grid code { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.9rem; }
