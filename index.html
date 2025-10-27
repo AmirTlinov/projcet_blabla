@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="Subagents · Flagship UI — быстрый контроль разработки без интерактива" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <title>Subagents · Flagship UI</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-theme="auto">
+    <a class="skip-link" href="#main">Перейти к контенту</a>
+    <header class="topbar" role="navigation" aria-label="Основная навигация">
+      <div class="brand">
+        <span class="logo-atom" aria-hidden="true"></span>
+        <strong class="brand-name">Subagents</strong>
+      </div>
+      <nav class="topbar-actions">
+        <button id="toggle-theme" class="btn ghost" aria-pressed="false">Тема</button>
+        <button id="open-help" class="btn ghost">Справка</button>
+      </nav>
+    </header>
+
+    <main id="main" class="page">
+      <section class="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title" class="gradient-text">Flagship+++ Workflow</h1>
+        <p>Команда → результат. Патчи, превью, деплой, Issues/PR — без интерактива.</p>
+        <div class="hero-actions">
+          <button class="btn cta" data-scroll="#cli">CLI репетиция</button>
+          <button class="btn" data-scroll="#orchestrator">Оркестратор</button>
+          <button class="btn" data-scroll="#faq">FAQ</button>
+        </div>
+      </section>
+
+      <section id="cli" class="panel" aria-labelledby="cli-title">
+        <h2 id="cli-title">CLI репетиция</h2>
+        <div class="terminal" role="region" aria-live="polite">
+          <div id="terminal-output" class="terminal-output"></div>
+          <div class="terminal-input">
+            <span>$</span>
+            <input id="command-input" type="text" placeholder="subagents patch --summary-only" />
+            <button id="run-command" class="btn">Выполнить</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="orchestrator" class="panel" aria-labelledby="orc-title">
+        <h2 id="orc-title">Оркестратор</h2>
+        <ul class="metrics">
+          <li><span>p95</span><strong data-metric data-min="4" data-max="12">—</strong><small>мс</small></li>
+          <li><span>reuse</span><strong data-metric data-min="70" data-max="100">—</strong><small>%</small></li>
+          <li><span>cost</span><strong data-metric data-min="0.02" data-max="0.12">—</strong><small>$</small></li>
+        </ul>
+        <button id="refresh-metrics" class="btn ghost">Обновить</button>
+        <ol class="log" data-log-stream aria-live="polite"></ol>
+      </section>
+
+      <section id="faq" class="panel" aria-labelledby="faq-title">
+        <h2 id="faq-title">FAQ</h2>
+        <details>
+          <summary>Как безопасно применить патч?</summary>
+          <pre>git diff -U0 | subagents patch --dry-run --json</pre>
+        </details>
+        <details>
+          <summary>Как слить PR без интерактива?</summary>
+          <pre>subagents gh pr-merge &lt;PR&gt; --json --timeout 240</pre>
+        </details>
+      </section>
+    </main>
+
+    <footer class="footer">© Subagents · 2025</footer>
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>
