@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />\n    <meta name="color-scheme" content="dark light" />
     <title>Codex Subagent Control Room</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,7 +12,7 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body data-theme="auto">
     <div class="page">
       <header class="hero" id="top">
         <div class="badge">Flagship+++ workflow</div>
@@ -30,7 +30,7 @@
         </div>
         <div class="hero-actions">
           <button class="cta" id="spawn-agent">Spawn web-agent</button>
-          <button class="ghost" id="toggle-theme">Toggle theme</button>
+          <button class="ghost" id="toggle-theme" aria-pressed="false" aria-label="Toggle color theme">Toggle theme</button>
         </div>
         <nav class="hero-nav" aria-label="Quick navigation">
           <button class="ghost" type="button" data-scroll="#cli">CLI rehearsal</button>
@@ -52,6 +52,10 @@
             <span>Streaming Logs</span>
             `subagents logs --follow --follow-seconds 10`
           </div>
+          <div>
+            <span>Context Memory</span>
+            `subagents context set default_agent dev`
+          </div>
         </div>
       </header>
 
@@ -61,10 +65,10 @@
             <h2 id="cmd-title">Interactive CLI rehearsal</h2>
             <p>Симуляция удалённых команд. Ввод поддерживает готовые snippets.</p>
           </div>
-          <button class="ghost" id="insert-snippet">Insert snippet</button>
+          <button class="ghost" id="insert-snippet" aria-label="Insert CLI snippet">Insert snippet</button>
         </div>
         <div class="terminal">
-          <div class="terminal-output" id="terminal-output" aria-live="polite"></div>
+          <div class="terminal-output" id="terminal-output" aria-live="polite" aria-atomic="false"></div>
           <div class="terminal-input">
             <span>$</span>
             <input
@@ -245,7 +249,7 @@ subagents logs web-agent \
   --remote-url http://127.0.0.1:8075 \
   --token secret --follow --follow-seconds 15
           </pre>
-          <button class="cta" id="copy-recipe">Copy snippet</button>
+          <button class="cta" id="copy-recipe" aria-label="Copy snippet to clipboard">Copy snippet</button>
         </article>
       </section>
 
